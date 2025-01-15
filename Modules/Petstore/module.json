@@ -1,0 +1,11 @@
+{
+    "name": "Petstore",
+    "alias": "petstore",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Petstore\\Providers\\PetstoreServiceProvider"
+    ],
+    "files": []
+}
