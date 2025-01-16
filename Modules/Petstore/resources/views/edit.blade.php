@@ -13,6 +13,16 @@
                                value="{{$pet->name}}">
                     </div>
                     <div class="form-group">
+                        <label for="category">Category</label>
+                        <input type="text" class="form-control" id="category" name="category"
+                               value="{{ $pet->category->name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Tags (separated by a comma)</label>
+                        <input type="text" class="form-control" id="tags" name="tags"
+                               value="{{ $pet->getTagsAsString() }}">
+                    </div>
+                    <div class="form-group">
                         <label for="status">Status</label>
                         <select class="form-control" id="status" name="status">
                             @foreach($allowed_statuses as $allowed_status)
