@@ -53,8 +53,10 @@
                             <td>
                                 <a class="btn btn-primary"
                                    href="{{ route('petstore.edit', ['id' => $pet->id])  }}">Edit</a>
-                                <a class="btn btn-danger"
-                                   href="{{ route('petstore.destroy', ['id' => $pet->id])  }}">Remove</a>
+                                <button class="btn btn-danger remove-pet"
+                                        type="button"
+                                        data-pet-url="{{ route('petstore.destroy', ['id' => $pet->id]) }}">Remove
+                                </button>
 
                             </td>
                         </tr>
@@ -69,4 +71,42 @@
             <div class="col"></div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        const buttons = document.querySelectorAll(".remove-pet");
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", function () {
+                const url = button.getAttribute("data-pet-url");
+                const userConfirmed = window.confirm('Are you sure you want to delete this pet?');
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                if (userConfirmed) {
+                    fetch(`${url}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            'X-CSRF-TOKEN': token
+                        },
+                    })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Network response was not ok " + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            alert(data);
+                            window.location.reload();
+                        })
+                        .catch((error) => {
+                            alert(error);
+                            window.location.reload();
+                        });
+                }
+            });
+        });
+    </script>
 @endsection

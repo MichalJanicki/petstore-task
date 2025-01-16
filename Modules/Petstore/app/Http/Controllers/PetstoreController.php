@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Petstore\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Modules\Petstore\Enums\PetStatus;
 use Modules\Petstore\Exceptions\ConnectionErrorException;
 use Modules\Petstore\Exceptions\PetNotFoundException;
@@ -121,8 +122,15 @@ final class PetstoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
-        //
+        try {
+            $this->petstoreService->delete($id);
+            return new JsonResponse('Pet has been removed', JsonResponse::HTTP_OK);
+        } catch (PetNotFoundException $e) {
+            return new JsonResponse($e->getMessage(), JsonResponse::HTTP_NOT_FOUND);
+        } catch (ConnectionErrorException $e) {
+            return new JsonResponse($e->getMessage(), JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
