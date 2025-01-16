@@ -4,6 +4,8 @@ namespace Modules\Petstore\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Petstore\Services\IPetstoreService;
+use Modules\Petstore\Services\PetstoreService;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -128,6 +130,7 @@ class PetstoreServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->bind(IPetstoreService::class, PetstoreService::class);
     }
 
     /**

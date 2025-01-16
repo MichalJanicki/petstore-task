@@ -1,18 +1,60 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Petstore\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Petstore\Enums\PetStatus;
+use Modules\Petstore\Exceptions\ConnectionErrorException;
+use Modules\Petstore\Exceptions\PetNotFoundException;
+use Modules\Petstore\Http\Requests\IndexRequest;
+use Modules\Petstore\Http\Requests\StorePetRequest;
+use Modules\Petstore\Services\PetstoreService;
 
-class PetstoreController extends Controller
+final class PetstoreController extends Controller
 {
+    public function __construct(private PetstoreService $petstoreService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexRequest $request)
     {
-        return view('petstore::index');
+        $status = $request->input('status');
+
+        try {
+            return view('petstore::index', [
+                'allowed_statuses' => PetStatus::cases(),
+                'pets' => $this->petstoreService->getByStatus($status),
+                'current_status' => $status,
+            ]);
+        } catch (ConnectionErrorException $e) {
+            abort(500, $e->getMessage());
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StorePetRequest $request)
+    {
+        $pet = $request->getDto();
+        try {
+            $this->petstoreService->create($pet);
+            return redirect()->route('petstore.index', ['status' => $pet->status])->with(
+                'success',
+                "$pet->name created."
+            );
+        } catch (ConnectionErrorException $e) {
+            return redirect()->route('petstore.index', ['status' => $pet->status])->with(
+                'error',
+                $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -20,31 +62,40 @@ class PetstoreController extends Controller
      */
     public function create()
     {
-        return view('petstore::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('petstore::create', [
+            'allowed_statuses' => PetStatus::cases(),
+        ]);
     }
 
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show(string $id)
     {
-        return view('petstore::show');
+        try {
+            $pet = $this->petstoreService->get($id);
+            return view('petstore::show', [
+                'pet' => $pet
+            ]);
+        } catch (PetNotFoundException $e) {
+            abort(404, $e->getMessage());
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(string $id)
     {
-        return view('petstore::edit');
+        try {
+            $pet = $this->petstoreService->get($id);
+            return view('petstore::edit', [
+                'pet' => $pet,
+                'allowed_statuses' => PetStatus::cases(),
+            ]);
+        } catch (PetNotFoundException $e) {
+            abort(404, $e->getMessage());
+        }
     }
 
     /**
@@ -58,7 +109,7 @@ class PetstoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         //
     }
