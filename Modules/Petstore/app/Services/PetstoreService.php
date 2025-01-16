@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Petstore\Services;
 
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Modules\Petstore\DTOs\Category;
 use Modules\Petstore\DTOs\Pet;
@@ -135,5 +137,27 @@ final class PetstoreService implements IPetstoreService
     private function mapToTags(array $tags): array
     {
         return array_map(fn($tag) => new Tag($tag['id'] ?? null, $tag['name'] ?? ''), $tags);
+    }
+
+    /**
+     * @throws ConnectionException
+     * @throws PetNotFoundException
+     */
+    public function updatePhoto(string $id, UploadedFile $photo): void
+    {
+        $url = config('petstore.resource_url');
+        $response = Http::attach(
+            'file',
+            fopen(
+                $photo->getPathname(),
+                'r'
+            ),
+            $photo->getClientOriginalName()
+        )
+            ->post("{$url}/{$id}/uploadImage");
+
+        if (404 === $response->status()) {
+            throw new PetNotFoundException('Pet not found');
+        }
     }
 }

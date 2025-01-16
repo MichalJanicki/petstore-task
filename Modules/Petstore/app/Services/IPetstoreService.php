@@ -2,6 +2,7 @@
 
 namespace Modules\Petstore\Services;
 
+use Illuminate\Http\UploadedFile;
 use Modules\Petstore\DTOs\Pet;
 
 interface IPetstoreService
@@ -15,4 +16,6 @@ interface IPetstoreService
     public function delete(string $id): void;
 
     public function getByStatus(string $status): ?array;
+
+    public function updatePhoto(string $id, UploadedFile $photo): void;
 }

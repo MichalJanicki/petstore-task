@@ -23,4 +23,6 @@ Route::name('petstore.')->group(function () {
     Route::delete('/{id}/remove', [PetstoreController::class, 'destroy'])->name('destroy');
     Route::post('/{id}/update', [PetstoreController::class, 'update'])->name('update');
     Route::post('/store', [PetstoreController::class, 'store'])->name('store');
+    Route::post('/{id}/updatePhoto', [PetstoreController::class, 'updatePhoto'])->name('updatePhoto');
+    Route::get('/{id}/editPhoto', [PetstoreController::class, 'editPhoto'])->name('editPhoto');
 });
