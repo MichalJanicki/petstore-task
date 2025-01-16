@@ -44,15 +44,28 @@ final class PetstoreService implements IPetstoreService
             'tags' => $pet->tags,
             'status' => $pet->status,
         ]);
-        
+
         if ($response->failed()) {
             throw new ConnectionErrorException("Unexpected error - try again later");
         }
     }
 
+    /**
+     * @throws ConnectionErrorException
+     * @throws PetNotFoundException
+     */
     public function delete(string $id): void
     {
-        // TODO: Implement delete() method.
+        $url = config('petstore.resource_url');
+        $response = Http::delete("{$url}/{$id}");
+
+        if (404 === $response->status()) {
+            throw new PetNotFoundException('Pet not found');
+        }
+
+        if ($response->failed()) {
+            throw new ConnectionErrorException("Unexpected error - try again later");
+        }
     }
 
     /**
