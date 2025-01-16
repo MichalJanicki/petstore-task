@@ -6,13 +6,13 @@ namespace Modules\Petstore\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Modules\Petstore\DTOs\Category;
-use Modules\Petstore\DTOs\Pet;
-use Modules\Petstore\DTOs\Tag;
 use Modules\Petstore\Enums\PetStatus;
+use Modules\Petstore\Traits\WithPetDto;
 
-class StorePetRequest extends FormRequest
+final class StorePetRequest extends FormRequest
 {
+    use WithPetDto;
+
     /**
      * Get the validation rules that apply to the request.
      */
@@ -23,7 +23,6 @@ class StorePetRequest extends FormRequest
             'category' => 'string|nullable',
             'tags' => 'string|nullable',
             'status' => [Rule::enum(PetStatus::class)],
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
@@ -33,22 +32,5 @@ class StorePetRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    public function getDto(): Pet
-    {
-        $category = $this->input('category') ? new Category(null, $this->input('category')) : null;
-        $tagsList = $this->input('tags') ? explode(',', $this->input('tags')) : [];
-
-        $tags = array_map(fn($tag) => new Tag(null, $tag), $tagsList);
-
-        return new Pet(
-            null,
-            $this->input('name'),
-            $category, $this->input('photoUrls', []),
-            $tags,
-            $this->input('status'),
-            null
-        );
     }
 }

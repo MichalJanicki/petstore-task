@@ -10,9 +10,9 @@ interface IPetstoreService
 
     public function create(Pet $pet): void;
 
-    public function update(Pet $pet): void;
+    public function update(string $id, Pet $pet): void;
 
-    public function delete(Pet $pet): void;
+    public function delete(string $id): void;
 
     public function getByStatus(string $status): ?array;
 }

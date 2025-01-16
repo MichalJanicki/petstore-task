@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Petstore\Enums\PetStatus;
 
-class IndexRequest extends FormRequest
+final class IndexRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
