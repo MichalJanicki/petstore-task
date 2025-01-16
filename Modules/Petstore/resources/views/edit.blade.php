@@ -27,13 +27,18 @@
                         <select class="form-control" id="status" name="status">
                             @foreach($allowed_statuses as $allowed_status)
                                 <option
-                                    @if($pet?->status === $allowed_status->value) selected @endif
+                                        @if($pet?->status === $allowed_status->value) selected @endif
                                 value="{{ $allowed_status->value }}">{{ $allowed_status->value }}</option>
                             @endforeach
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
+                @if (session('success'))
+                    <div class="alert alert-success"> {{ session('success') }} </div>
+                @endif @if (session('error'))
+                    <div class="alert alert-danger"> {{ session('error') }} </div>
+                @endif
             </div>
             <div class="col"></div>
         </div>

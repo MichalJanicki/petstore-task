@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Modules\Petstore\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Modules\Petstore\Enums\PetStatus;
 use Modules\Petstore\Exceptions\ConnectionErrorException;
 use Modules\Petstore\Exceptions\PetNotFoundException;
 use Modules\Petstore\Http\Requests\IndexRequest;
 use Modules\Petstore\Http\Requests\StorePetRequest;
+use Modules\Petstore\Http\Requests\UpdatePetRequest;
 use Modules\Petstore\Services\PetstoreService;
 
 final class PetstoreController extends Controller
@@ -101,9 +101,21 @@ final class PetstoreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePetRequest $request, string $id)
     {
-        //
+        $pet = $request->getDto();
+        try {
+            $this->petstoreService->update($id, $pet);
+            return redirect()->route('petstore.edit', ['id' => $id])->with(
+                'success',
+                "$pet->name updated."
+            );
+        } catch (ConnectionErrorException $e) {
+            return redirect()->route('petstore.edit', ['id' => $id])->with(
+                'error',
+                $e->getMessage()
+            );
+        }
     }
 
     /**

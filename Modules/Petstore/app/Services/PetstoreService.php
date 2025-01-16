@@ -25,18 +25,32 @@ final class PetstoreService implements IPetstoreService
             'tags' => $pet->tags,
             'status' => $pet->status,
         ]);
+
+        if ($response->failed()) {
+            throw new ConnectionErrorException("Unexpected error - try again later");
+        }
+    }
+
+    /**
+     * @throws ConnectionErrorException
+     */
+    public function update(string $id, Pet $pet): void
+    {
+        $url = config('petstore.resource_url');
+        $response = Http::put("{$url}", [
+            'id' => $id,
+            'name' => $pet->name,
+            'category' => $pet->category,
+            'tags' => $pet->tags,
+            'status' => $pet->status,
+        ]);
         
         if ($response->failed()) {
             throw new ConnectionErrorException("Unexpected error - try again later");
         }
     }
 
-    public function update(Pet $pet): void
-    {
-        // TODO: Implement update() method.
-    }
-
-    public function delete(Pet $pet): void
+    public function delete(string $id): void
     {
         // TODO: Implement delete() method.
     }
