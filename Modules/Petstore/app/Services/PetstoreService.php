@@ -25,7 +25,7 @@ final class PetstoreService implements IPetstoreService
             'tags' => $pet->tags,
             'status' => $pet->status,
         ]);
-
+        
         if ($response->failed()) {
             throw new ConnectionErrorException("Unexpected error - try again later");
         }

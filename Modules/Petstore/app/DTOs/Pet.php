@@ -18,4 +18,10 @@ final class Pet
         public ?UploadedFile $photo,
     ) {
     }
+
+    public function getTagsAsString(): string
+    {
+        $tags = array_column($this->tags, 'name');
+        return implode(', ', $tags);
+    }
 }
