@@ -32,7 +32,7 @@ final class PetstoreController extends Controller
         try {
             return view('petstore::index', [
                 'allowed_statuses' => PetStatus::cases(),
-                'pets' => $this->petstoreService->getByStatus($status),
+                'pets' => $status ? $this->petstoreService->getByStatus($status) : [],
                 'current_status' => $status,
             ]);
         } catch (ConnectionErrorException $e) {
