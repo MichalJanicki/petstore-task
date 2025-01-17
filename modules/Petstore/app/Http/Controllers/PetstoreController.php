@@ -14,11 +14,11 @@ use Modules\Petstore\Http\Requests\IndexRequest;
 use Modules\Petstore\Http\Requests\StorePetRequest;
 use Modules\Petstore\Http\Requests\UpdatePetRequest;
 use Modules\Petstore\Http\Requests\UpdatePhotoRequest;
-use Modules\Petstore\Services\PetstoreService;
+use Modules\Petstore\Repositories\PetstoreRepository;
 
 final class PetstoreController extends Controller
 {
-    public function __construct(private PetstoreService $petstoreService)
+    public function __construct(private PetstoreRepository $petstoreRepository)
     {
     }
 
@@ -32,7 +32,7 @@ final class PetstoreController extends Controller
         try {
             return view('petstore::index', [
                 'allowed_statuses' => PetStatus::cases(),
-                'pets' => $status ? $this->petstoreService->getByStatus($status) : [],
+                'pets' => $status ? $this->petstoreRepository->getByStatus($status) : [],
                 'current_status' => $status,
             ]);
         } catch (ConnectionErrorException $e) {
@@ -47,7 +47,7 @@ final class PetstoreController extends Controller
     {
         $pet = $request->getDto();
         try {
-            $this->petstoreService->create($pet);
+            $this->petstoreRepository->create($pet);
             return redirect()->route('petstore.index', ['status' => $pet->status])->with(
                 'success',
                 "$pet->name created."
@@ -76,7 +76,7 @@ final class PetstoreController extends Controller
     public function show(string $id)
     {
         try {
-            $pet = $this->petstoreService->get($id);
+            $pet = $this->petstoreRepository->get($id);
             return view('petstore::show', [
                 'pet' => $pet
             ]);
@@ -91,7 +91,7 @@ final class PetstoreController extends Controller
     public function edit(string $id)
     {
         try {
-            $pet = $this->petstoreService->get($id);
+            $pet = $this->petstoreRepository->get($id);
             return view('petstore::edit', [
                 'pet' => $pet,
                 'allowed_statuses' => PetStatus::cases(),
@@ -108,7 +108,7 @@ final class PetstoreController extends Controller
     {
         $pet = $request->getDto();
         try {
-            $this->petstoreService->update($id, $pet);
+            $this->petstoreRepository->update($id, $pet);
             return redirect()->route('petstore.edit', ['id' => $id])->with(
                 'success',
                 "$pet->name updated."
@@ -127,7 +127,7 @@ final class PetstoreController extends Controller
     public function destroy(string $id): JsonResponse
     {
         try {
-            $this->petstoreService->delete($id);
+            $this->petstoreRepository->delete($id);
             return new JsonResponse('Pet has been removed', JsonResponse::HTTP_OK);
         } catch (PetNotFoundException $e) {
             return new JsonResponse($e->getMessage(), JsonResponse::HTTP_NOT_FOUND);
@@ -146,7 +146,7 @@ final class PetstoreController extends Controller
     public function updatePhoto(UpdatePhotoRequest $request, string $id)
     {
         try {
-            $this->petstoreService->updatePhoto($id, $request->file('photo'));
+            $this->petstoreRepository->updatePhoto($id, $request->file('photo'));
             return redirect()->route('petstore.editPhoto', ['id' => $id])->with(
                 'success',
                 "Photo uploaded successfully."

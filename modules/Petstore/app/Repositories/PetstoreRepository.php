@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Petstore\Services;
+namespace Modules\Petstore\Repositories;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\UploadedFile;
@@ -14,7 +14,7 @@ use Modules\Petstore\Exceptions\ConnectionErrorException;
 use Modules\Petstore\Exceptions\InvalidPetStatusException;
 use Modules\Petstore\Exceptions\PetNotFoundException;
 
-final class PetstoreService implements IPetstoreService
+final class PetstoreRepository implements IPetstoreRepository
 {
     /**
      * @throws ConnectionErrorException
