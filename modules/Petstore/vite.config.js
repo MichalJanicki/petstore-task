@@ -32,7 +32,7 @@ export default defineConfig({
 //            const filePath = join(currentPath, file);
 //            const stats = statSync(filePath);
 //            if (stats.isFile() && !file.startsWith('.')) {
-//                const relativePath = 'Modules/Petstore/'+relative(__dirname, filePath);
+//                const relativePath = 'modules/Petstore/'+relative(__dirname, filePath);
 //                filePaths.push(relativePath);
 //            } else if (stats.isDirectory()) {
 //                walkDirectory(filePath);
@@ -52,6 +52,6 @@ export default defineConfig({
 
 
 //export const paths = [
-//    'Modules/Petstore/resources/assets/sass/app.scss',
-//    'Modules/Petstore/resources/assets/js/app.js',
+//    'modules/Petstore/resources/assets/sass/app.scss',
+//    'modules/Petstore/resources/assets/js/app.js',
 //];
