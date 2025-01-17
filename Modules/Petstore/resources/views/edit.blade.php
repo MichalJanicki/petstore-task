@@ -33,6 +33,8 @@
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
+                    <a class="btn btn-primary my-1"
+                       href="{{ route('petstore.index', ['status' => $pet->status]) }}">Back</a>
                 </form>
                 @if (session('success'))
                     <div class="alert alert-success"> {{ session('success') }} </div>
