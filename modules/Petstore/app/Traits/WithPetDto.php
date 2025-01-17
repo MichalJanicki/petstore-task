@@ -18,11 +18,12 @@ trait WithPetDto
         $tags = array_map(fn($tag) => new Tag(null, $tag), $tagsList);
 
         return new Pet(
-            null,
             $this->input('name'),
-            $category, $this->input('photoUrls', []),
+            $this->input('photoUrls', []),
             $tags,
             $this->input('status'),
+            null,
+            $category,
             null
         );
     }
