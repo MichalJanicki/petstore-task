@@ -11,6 +11,7 @@ use Modules\Petstore\DTOs\Category;
 use Modules\Petstore\DTOs\Pet;
 use Modules\Petstore\DTOs\Tag;
 use Modules\Petstore\Exceptions\ConnectionErrorException;
+use Modules\Petstore\Exceptions\InvalidPetStatusException;
 use Modules\Petstore\Exceptions\PetNotFoundException;
 
 final class PetstoreService implements IPetstoreService
@@ -72,16 +73,17 @@ final class PetstoreService implements IPetstoreService
 
     /**
      * @throws ConnectionErrorException
+     * @throws InvalidPetStatusException
      */
-    public function getByStatus(?string $status): ?array
+    public function getByStatus(string $status): array
     {
-        if (is_null($status)) {
-            return [];
-        }
-
         $petList = [];
         $url = config('petstore.resource_url');
         $response = Http::get("{$url}/findByStatus?status=$status");
+
+        if (400 === $response->status()) {
+            throw new InvalidPetStatusException('Invalid pet status');
+        }
 
         if ($response->failed()) {
             throw new ConnectionErrorException('Unexpected error - try again later');
@@ -98,17 +100,44 @@ final class PetstoreService implements IPetstoreService
 
     /**
      * @throws PetNotFoundException
+     * @throws ConnectionErrorException
      */
     public function get(string $id): ?Pet
     {
         $url = config('petstore.resource_url');
         $response = Http::get("{$url}/{$id}");
 
-        if ($response->failed()) {
+        if (404 === $response->status()) {
             throw new PetNotFoundException('Pet not found');
         }
 
+        if ($response->failed()) {
+            throw new ConnectionErrorException("Unexpected error - try again later");
+        }
+
         return $this->mapToPet($response->json());
+    }
+
+    /**
+     * @throws ConnectionException
+     * @throws PetNotFoundException
+     */
+    public function updatePhoto(string $id, UploadedFile $photo): void
+    {
+        $url = config('petstore.resource_url');
+        $response = Http::attach(
+            'file',
+            fopen(
+                $photo->getPathname(),
+                'r'
+            ),
+            $photo->getClientOriginalName()
+        )
+            ->post("{$url}/{$id}/uploadImage");
+
+        if (404 === $response->status()) {
+            throw new PetNotFoundException('Pet not found');
+        }
     }
 
     private function mapToPet(array $data): Pet
@@ -137,27 +166,5 @@ final class PetstoreService implements IPetstoreService
     private function mapToTags(array $tags): array
     {
         return array_map(fn($tag) => new Tag($tag['id'] ?? null, $tag['name'] ?? ''), $tags);
-    }
-
-    /**
-     * @throws ConnectionException
-     * @throws PetNotFoundException
-     */
-    public function updatePhoto(string $id, UploadedFile $photo): void
-    {
-        $url = config('petstore.resource_url');
-        $response = Http::attach(
-            'file',
-            fopen(
-                $photo->getPathname(),
-                'r'
-            ),
-            $photo->getClientOriginalName()
-        )
-            ->post("{$url}/{$id}/uploadImage");
-
-        if (404 === $response->status()) {
-            throw new PetNotFoundException('Pet not found');
-        }
     }
 }
