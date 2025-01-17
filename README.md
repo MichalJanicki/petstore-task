@@ -5,9 +5,7 @@
 
 3. `cp .env.example .env`
 
-4. `php artisan key:generate`
-
-5. `composer run post-create-project-cmd`
+4. `composer run post-create-project-cmd`
 
 5. `php artisan serve`
 
