@@ -1,10 +1,10 @@
 {
-    "name": "nwidart/petstore",
+    "name": "michaljanicki/petstore",
     "description": "",
     "authors": [
         {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
+            "name": "Michal Janicki",
+            "email": "michal.stefan.janicki@gmail.com"
         }
     ],
     "extra": {
