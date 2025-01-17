@@ -7,15 +7,15 @@ use Modules\Petstore\DTOs\Pet;
 
 interface IPetstoreRepository
 {
-    public function get(string $id): ?Pet;
+    public function get(int $id): ?Pet;
 
     public function create(Pet $pet): void;
 
-    public function update(string $id, Pet $pet): void;
+    public function update(int $id, Pet $pet): void;
 
-    public function delete(string $id): void;
+    public function delete(int $id): void;
 
     public function getByStatus(string $status): ?array;
 
-    public function updatePhoto(string $id, UploadedFile $photo): void;
+    public function updatePhoto(int $id, UploadedFile $photo): void;
 }

@@ -71,7 +71,7 @@ final class PetstoreRepositoryTest extends TestCase
         ]);
 
         $pet = $this->getPet();
-        $this->petstoreRepository->update("1", $pet);
+        $this->petstoreRepository->update(1, $pet);
 
         $this->expectNotToPerformAssertions();
     }
@@ -90,7 +90,7 @@ final class PetstoreRepositoryTest extends TestCase
             ], 500)
         ]);
 
-        $this->petstoreRepository->update("1", $pet);
+        $this->petstoreRepository->update(1, $pet);
     }
 
     #[Test] public function should_delete_pet_without_exception(): void
@@ -103,7 +103,7 @@ final class PetstoreRepositoryTest extends TestCase
             ], 200)
         ]);
 
-        $this->petstoreRepository->delete("1");
+        $this->petstoreRepository->delete(1);
 
         $this->expectNotToPerformAssertions();
     }
@@ -121,7 +121,7 @@ final class PetstoreRepositoryTest extends TestCase
             ], 500)
         ]);
 
-        $this->petstoreRepository->delete("1");
+        $this->petstoreRepository->delete(1);
     }
 
     #[Test] public function throws_exception_when_deleted_pet_not_found(): void
@@ -133,7 +133,7 @@ final class PetstoreRepositoryTest extends TestCase
             "{$this->url}/1" => Http::response([], 404)
         ]);
 
-        $this->petstoreRepository->delete("1");
+        $this->petstoreRepository->delete(1);
     }
 
     #[Test] public function should_get_pets_by_status()
@@ -183,7 +183,7 @@ final class PetstoreRepositoryTest extends TestCase
             "{$this->url}/1" => $this->getPetByStatusResponse()
         ]);
 
-        $pet = $this->petstoreRepository->get("1");
+        $pet = $this->petstoreRepository->get(1);
         $this->assertInstanceOf(Pet::class, $pet);
     }
 
@@ -196,7 +196,7 @@ final class PetstoreRepositoryTest extends TestCase
             "{$this->url}/1" => Http::response([], 404)
         ]);
 
-        $this->petstoreRepository->get("1");
+        $this->petstoreRepository->get(1);
     }
 
     #[Test] public function throws_exception_on_get_pet_by_id_failure(): void
@@ -212,7 +212,7 @@ final class PetstoreRepositoryTest extends TestCase
             ], 500)
         ]);
 
-        $this->petstoreRepository->get("1");
+        $this->petstoreRepository->get(1);
     }
 
     #[Test] public function should_can_update_pet_photo_without_exception(): void
@@ -226,7 +226,7 @@ final class PetstoreRepositoryTest extends TestCase
         ]);
 
         $photo = UploadedFile::fake()->image('test.jpg');
-        $this->petstoreRepository->updatePhoto('1', $photo);
+        $this->petstoreRepository->updatePhoto(1, $photo);
         $this->expectNotToPerformAssertions();
     }
 
@@ -240,7 +240,7 @@ final class PetstoreRepositoryTest extends TestCase
         ]);
 
         $photo = UploadedFile::fake()->image('test.jpg');
-        $this->petstoreRepository->updatePhoto('1', $photo);
+        $this->petstoreRepository->updatePhoto(1, $photo);
     }
 
     protected function setUp(): void

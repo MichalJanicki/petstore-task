@@ -73,7 +73,7 @@ final class PetstoreController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
         try {
             $pet = $this->petstoreRepository->get($id);
@@ -88,7 +88,7 @@ final class PetstoreController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $id)
     {
         try {
             $pet = $this->petstoreRepository->get($id);
@@ -104,7 +104,7 @@ final class PetstoreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePetRequest $request, string $id)
+    public function update(UpdatePetRequest $request, int $id)
     {
         $pet = $request->getDto();
         try {
@@ -124,7 +124,7 @@ final class PetstoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         try {
             $this->petstoreRepository->delete($id);
@@ -136,14 +136,14 @@ final class PetstoreController extends Controller
         }
     }
 
-    public function editPhoto(string $id)
+    public function editPhoto(int $id)
     {
         return view('petstore::edit-photo', [
             'id' => $id
         ]);
     }
 
-    public function updatePhoto(UpdatePhotoRequest $request, string $id)
+    public function updatePhoto(UpdatePhotoRequest $request, int $id)
     {
         try {
             $this->petstoreRepository->updatePhoto($id, $request->file('photo'));
