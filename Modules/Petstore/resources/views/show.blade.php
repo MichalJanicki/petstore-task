@@ -1,27 +1,35 @@
 @extends('petstore::layouts.master')
 
 @section('content')
-    Nazwa: {{ $pet->name }}
-    <br/>
-    Kategoria: {{ $pet->category->name  }}
-    <br/>
-    Foto:
-    <ul>
-        @forelse($pet->photoUrls as $photo)
-            <li>{{$photo}}</li>
-        @empty
-            Brak fotografi
-        @endforelse
-    </ul>
-    Tagi:
-    <ul>
-        @forelse($pet->tags as $tag)
-            <li>{{$tag->name}}</li>
-        @empty
-            Brak tagów
-        @endforelse
-    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-6">
+                <h1>{{ $pet->name }}</h1>
+                <p>Category: {{ $pet->category->name  }}</p>
+                Poto:
+                <ul>
+                    @forelse($pet->photoUrls as $photo)
+                        <li>{{$photo}}</li>
+                    @empty
+                        Brak fotografi
+                    @endforelse
+                </ul>
+                Tags:
+                <ul>
+                    @forelse($pet->tags as $tag)
+                        <li>{{$tag->name}}</li>
+                    @empty
+                        Brak tagów
+                    @endforelse
+                </ul>
 
-    Status: {{ $pet->status }}
+                <p>Status: {{ $pet->status }}</p>
+                <a class="btn btn-primary my-1"
+                   href="{{ route('petstore.index', ['status' => $pet->status]) }}">Back</a>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
 
 @endsection
