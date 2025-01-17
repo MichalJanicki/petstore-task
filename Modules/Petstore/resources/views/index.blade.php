@@ -53,6 +53,10 @@
                             <td>
                                 <a class="btn btn-primary"
                                    href="{{ route('petstore.edit', ['id' => $pet->id])  }}">Edit</a>
+                                <a class="btn btn-primary"
+                                   href="{{ route('petstore.editPhoto', ['id' => $pet->id])  }}">Update photo</a>
+                                <a class="btn btn-primary"
+                                   href="{{ route('petstore.show', ['id' => $pet->id])  }}">Show</a>
                                 <button class="btn btn-danger remove-pet"
                                         type="button"
                                         data-pet-url="{{ route('petstore.destroy', ['id' => $pet->id]) }}">Remove
