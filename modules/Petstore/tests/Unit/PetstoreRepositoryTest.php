@@ -14,13 +14,13 @@ use Modules\Petstore\Enums\PetStatus;
 use Modules\Petstore\Exceptions\ConnectionErrorException;
 use Modules\Petstore\Exceptions\InvalidPetStatusException;
 use Modules\Petstore\Exceptions\PetNotFoundException;
-use Modules\Petstore\Services\PetstoreService;
+use Modules\Petstore\Repositories\PetstoreRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class PetstoreServiceTest extends TestCase
+class PetstoreRepositoryTest extends TestCase
 {
-    protected PetstoreService $service;
+    protected PetstoreRepository $petstoreRepository;
     private string $url;
 
     #[Test] public function throws_exception_when_create_fails(): void
@@ -37,7 +37,7 @@ class PetstoreServiceTest extends TestCase
             ], 500)
         ]);
 
-        $this->service->create($pet);
+        $this->petstoreRepository->create($pet);
     }
 
     #[Test] public function should_create_pet_without_exception()
@@ -53,7 +53,7 @@ class PetstoreServiceTest extends TestCase
         ]);
 
         $pet = $this->getPet();
-        $this->service->create($pet);
+        $this->petstoreRepository->create($pet);
 
         $this->expectNotToPerformAssertions();
     }
@@ -71,7 +71,7 @@ class PetstoreServiceTest extends TestCase
         ]);
 
         $pet = $this->getPet();
-        $this->service->update("1", $pet);
+        $this->petstoreRepository->update("1", $pet);
 
         $this->expectNotToPerformAssertions();
     }
@@ -90,7 +90,7 @@ class PetstoreServiceTest extends TestCase
             ], 500)
         ]);
 
-        $this->service->update("1", $pet);
+        $this->petstoreRepository->update("1", $pet);
     }
 
     #[Test] public function should_delete_pet_without_exception(): void
@@ -103,7 +103,7 @@ class PetstoreServiceTest extends TestCase
             ], 200)
         ]);
 
-        $this->service->delete("1");
+        $this->petstoreRepository->delete("1");
 
         $this->expectNotToPerformAssertions();
     }
@@ -121,7 +121,7 @@ class PetstoreServiceTest extends TestCase
             ], 500)
         ]);
 
-        $this->service->delete("1");
+        $this->petstoreRepository->delete("1");
     }
 
     #[Test] public function throws_exception_when_deleted_pet_not_found(): void
@@ -133,7 +133,7 @@ class PetstoreServiceTest extends TestCase
             "{$this->url}/1" => Http::response([], 404)
         ]);
 
-        $this->service->delete("1");
+        $this->petstoreRepository->delete("1");
     }
 
     #[Test] public function should_get_pets_by_status()
@@ -142,7 +142,7 @@ class PetstoreServiceTest extends TestCase
             "{$this->url}/findByStatus?status=sold" => $this->getPetsByStatusResponse()
         ]);
 
-        $pets = $this->service->getByStatus(PetStatus::SOLD->value);
+        $pets = $this->petstoreRepository->getByStatus(PetStatus::SOLD->value);
 
         $this->assertCount(2, $pets);
         $this->assertInstanceOf(Pet::class, $pets[0]);
@@ -162,7 +162,7 @@ class PetstoreServiceTest extends TestCase
             ], 500)
         ]);
 
-        $this->service->getByStatus(PetStatus::SOLD->value);
+        $this->petstoreRepository->getByStatus(PetStatus::SOLD->value);
     }
 
     #[Test] public function throws_not_found_on_invalid_status(): void
@@ -174,7 +174,7 @@ class PetstoreServiceTest extends TestCase
             "{$this->url}/findByStatus?status=invalid-status" => Http::response([], 400)
         ]);
 
-        $this->service->getByStatus('invalid-status');
+        $this->petstoreRepository->getByStatus('invalid-status');
     }
 
     #[Test] public function should_can_get_a_pet_by_id(): void
@@ -183,7 +183,7 @@ class PetstoreServiceTest extends TestCase
             "{$this->url}/1" => $this->getPetByStatusResponse()
         ]);
 
-        $pet = $this->service->get("1");
+        $pet = $this->petstoreRepository->get("1");
         $this->assertInstanceOf(Pet::class, $pet);
     }
 
@@ -196,7 +196,7 @@ class PetstoreServiceTest extends TestCase
             "{$this->url}/1" => Http::response([], 404)
         ]);
 
-        $this->service->get("1");
+        $this->petstoreRepository->get("1");
     }
 
     #[Test] public function throws_exception_on_get_pet_by_id_failure(): void
@@ -212,7 +212,7 @@ class PetstoreServiceTest extends TestCase
             ], 500)
         ]);
 
-        $this->service->get("1");
+        $this->petstoreRepository->get("1");
     }
 
     #[Test] public function should_can_update_pet_photo_without_exception(): void
@@ -226,7 +226,7 @@ class PetstoreServiceTest extends TestCase
         ]);
 
         $photo = UploadedFile::fake()->image('test.jpg');
-        $this->service->updatePhoto('1', $photo);
+        $this->petstoreRepository->updatePhoto('1', $photo);
         $this->expectNotToPerformAssertions();
     }
 
@@ -240,13 +240,13 @@ class PetstoreServiceTest extends TestCase
         ]);
 
         $photo = UploadedFile::fake()->image('test.jpg');
-        $this->service->updatePhoto('1', $photo);
+        $this->petstoreRepository->updatePhoto('1', $photo);
     }
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new PetstoreService();
+        $this->petstoreRepository = new PetstoreRepository();
         config(['petstore.resource_url' => 'http://petstore.test']);
         $this->url = config('petstore.resource_url');
     }

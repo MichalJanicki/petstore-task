@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Petstore\Services;
+namespace Modules\Petstore\Repositories;
 
 use Illuminate\Http\UploadedFile;
 use Modules\Petstore\DTOs\Pet;
 
-interface IPetstoreService
+interface IPetstoreRepository
 {
     public function get(string $id): ?Pet;
 
