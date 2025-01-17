@@ -37,7 +37,7 @@ final class PetstoreRepository implements IPetstoreRepository
     /**
      * @throws ConnectionErrorException
      */
-    public function update(string $id, Pet $pet): void
+    public function update(int $id, Pet $pet): void
     {
         $url = config('petstore.resource_url');
         $response = Http::put("{$url}", [
@@ -57,7 +57,7 @@ final class PetstoreRepository implements IPetstoreRepository
      * @throws ConnectionErrorException
      * @throws PetNotFoundException
      */
-    public function delete(string $id): void
+    public function delete(int $id): void
     {
         $url = config('petstore.resource_url');
         $response = Http::delete("{$url}/{$id}");
@@ -102,7 +102,7 @@ final class PetstoreRepository implements IPetstoreRepository
      * @throws PetNotFoundException
      * @throws ConnectionErrorException
      */
-    public function get(string $id): ?Pet
+    public function get(int $id): ?Pet
     {
         $url = config('petstore.resource_url');
         $response = Http::get("{$url}/{$id}");
@@ -122,7 +122,7 @@ final class PetstoreRepository implements IPetstoreRepository
      * @throws ConnectionException
      * @throws PetNotFoundException
      */
-    public function updatePhoto(string $id, UploadedFile $photo): void
+    public function updatePhoto(int $id, UploadedFile $photo): void
     {
         $url = config('petstore.resource_url');
         $response = Http::attach(
