@@ -148,12 +148,12 @@ final class PetstoreRepository implements IPetstoreRepository
         ) : null;
 
         return new Pet(
-            $data['id'] ?? null,
             $data['name'] ?? '',
-            $category,
             $data['photoUrls'],
             $this->mapToTags($data['tags']),
             $data['status'],
+            $data['id'],
+            $category,
             null
         );
     }

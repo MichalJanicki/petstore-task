@@ -9,13 +9,13 @@ use Illuminate\Http\UploadedFile;
 final class Pet
 {
     public function __construct(
-        public ?int $id,
         public string $name,
-        public ?Category $category = null,
         public array $photoUrls,
         public array $tags,
         public string $status,
-        public ?UploadedFile $photo,
+        public ?int $id = null,
+        public ?Category $category = null,
+        public ?UploadedFile $photo = null,
     ) {
     }
 

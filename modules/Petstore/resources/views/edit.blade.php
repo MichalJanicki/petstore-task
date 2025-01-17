@@ -10,12 +10,12 @@
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" class="form-control" id="name" name="name"
-                               value="{{$pet->name}}">
+                               value="{{$pet?->name}}">
                     </div>
                     <div class="form-group">
                         <label for="category">Category</label>
                         <input type="text" class="form-control" id="category" name="category"
-                               value="{{ $pet->category->name }}">
+                               value="{{ $pet?->category?->name }}">
                     </div>
                     <div class="form-group">
                         <label for="tags">Tags (separated by a comma)</label>
@@ -34,7 +34,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <a class="btn btn-primary my-1"
-                       href="{{ route('petstore.index', ['status' => $pet->status]) }}">Back</a>
+                       href="{{ route('petstore.index', ['status' => $pet?->status]) }}">Back</a>
                 </form>
                 @if (session('success'))
                     <div class="alert alert-success"> {{ session('success') }} </div>

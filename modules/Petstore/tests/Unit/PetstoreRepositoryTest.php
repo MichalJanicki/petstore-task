@@ -18,7 +18,7 @@ use Modules\Petstore\Repositories\PetstoreRepository;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class PetstoreRepositoryTest extends TestCase
+final class PetstoreRepositoryTest extends TestCase
 {
     protected PetstoreRepository $petstoreRepository;
     private string $url;
@@ -257,12 +257,12 @@ class PetstoreRepositoryTest extends TestCase
         $tag = new Tag(null, 'tagu-1');
 
         return new Pet(
-            null,
             'Pet Name',
-            $category,
             [],
             [$tag],
             PetStatus::SOLD->value,
+            null,
+            $category,
             null
         );
     }
